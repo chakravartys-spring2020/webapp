@@ -44,7 +44,7 @@ class UserModel(db.Model):
             self.password = hashed_password
           else:
             setattr(self, key, item)
-          self.modified_at = datetime.datetime.utcnow()
+          self.account_updated = datetime.datetime.utcnow()
           db.session.commit()
 
   def delete(self):

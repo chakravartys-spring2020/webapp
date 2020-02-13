@@ -6,6 +6,8 @@ from .config import app_configurations
 from .models import db, bcrypt
 from .views.UserView import user_api as user_blueprint  # import user_api blueprint
 from .views.BillView import bill_api as bill_blueprint  # import bill_api blueprint
+from .views.FileView import file_api as file_blueprint  # import file_api blueprint
+
 
 def create_app(environment_selected):
   """
@@ -43,6 +45,7 @@ def create_app(environment_selected):
 
   app.register_blueprint(user_blueprint, url_prefix='/v1/user')
   app.register_blueprint(bill_blueprint, url_prefix='/v1/bill')
+  app.register_blueprint(file_blueprint, url_prefix='/v1/file')
 
   @app.route('/', methods=['GET'])
   def index():

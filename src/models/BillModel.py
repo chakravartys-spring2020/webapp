@@ -46,7 +46,7 @@ class BillModel(db.Model):
   def update(self, data):
     for key, item in data.items():
       setattr(self, key, item)
-    self.modified_at = datetime.datetime.utcnow()
+    self.account_updated = datetime.datetime.utcnow()
     db.session.commit()
 
   def delete(self):

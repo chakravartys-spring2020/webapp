@@ -10,3 +10,5 @@ db = SQLAlchemy()
 bcrypt = Bcrypt()
 
 from .UserModel import UserModel, UserSchema
+from .BillModel import BillModel, BillSchema
+from .FileModel import FileModel, FileSchema
