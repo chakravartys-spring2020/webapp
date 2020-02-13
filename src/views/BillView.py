@@ -81,27 +81,42 @@ def upload_file(bill_id):
       # bill does not contain an attachment so continue to build file metadata
       file_id = str(uuid.uuid4())
       filename = secure_filename(file.filename)
-      file_size = os.stat(filename).st_size
+	  file.save(os.path.join('/home/eos/Documents/Cloud/Assignment_4/tmp', filename))
+	  # print("FLAGGGGGG WHAT COMES AFTER THISSSSSSSSSSSSSSSS")
+      # print(filename)
+	  # print("FLAGGGGGG WHAT COMES BEFORE THISSSSSSSSSSSSSSSS")
+      file.seek(0, os.SEEK_END)
+      file_size = file.tell()
+      # file_size = os.stat(filename).st_size
       url = Haikunator().haikunate(delimiter = '.', token_hex = True, token_length = 6)
       hash_digest = hashlib.md5(file.stream.read()).hexdigest()
       upload_date = str(date.today())
       file_origin = str(os.path.abspath(filename))
 
       # create a unique folder to save each file attachment temporarily on disk
-      directory = '/' + bill_in_question.owner_id  + '/' + bill_id + '/' + file_id
-      temp_folder = os.path.join(app.config['UPLOAD_FOLDER'], directory)
-      print(temp_folder)
+      # Parent Directory path
+      #parent_dir = "/home/eos/Documents/Cloud/Assignment_4/tmp"
+      # Directory
+      #directory = '/' + bill_id + '/' + file_id
+      # Path
+      # path = os.path.join(parent_dir, filename)
+      # print(path)
+      # file.save(path)
+      # Create the directory
+      # os.mkdir(path)
+      # print("Directory '%s' created" %directory)
 
       # check the if the folder already exists
-      if not os.path.isdir(temp_folder):
-        os.mkdir(temp_folder)
-      else:
-        return custom_http_code("folder already exists", 400)
+      # if not os.path.isdir(temp_folder):
+      #   os.mkdir(temp_folder)
+      # else:
+      #   return custom_http_code("folder already exists", 400)
 
-      destination_folder = '/'.join([temp_folder, filename])
+      #os.mkdir(temp_folder)
+      # destination_folder = '/'.join([temp_folder, filename])
 
       # saves file to specified local folder or s3 bucket
-      file.save(destination_folder)
+
 
       # fill in user entered json body via postman
       requested_file_json = request.get_json(force = True)

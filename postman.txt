@@ -72,3 +72,10 @@ Create New Bill POST http://127.0.0.1:5000/v1/bill/
   "categories": ["spring2020"],
   "paymentStatus": "due"
 }
+
+{
+  "file_name": "mybill.pdf",
+  "id": "8f3fe850-db6b-46e3-a413-49ddd07d5fdd",
+  "url": "/tmp/file.jpg",
+  "upload_date": "2020-02-13"
+}

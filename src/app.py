@@ -14,7 +14,7 @@ def create_app(environment_selected):
   app = FlaskAPI(__name__) # app initiliazation
   app.config['SQLALCHEMY_ECHO'] = True                              # Configure the SQLAlchemy part of the app instance
   app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-  app.config['UPLOAD_FOLDER'] = "/home/eos/Documents/Cloud/Assignment_4/tmp"
+  # app.config['UPLOAD_FOLDER'] = "/home/eos/Documents/Cloud/Assignment_4/tmp"
   app.config.from_object(app_configurations[environment_selected])
 
   SELF = "'self'"
