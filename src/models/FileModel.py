@@ -60,16 +60,10 @@ class FileModel(db.Model):
   def select_file_by_bill_id(value):
       return FileModel.query.filter_by(bill_attached_to = value).first()
 
-    # @staticmethod
-    # def select_file_by_file_id(file_id):
-    #     return File.query.filter_by(id=file_id).first()
-
-
-
-    @staticmethod
-    def delete_file(file_id):
-        File.query.filter_by(id=file_id).delete()
-        db.session.commit()
+  @staticmethod
+  def delete_file(value):
+      FileModel.query.filter_by(id = value).delete()
+      db.session.commit()
 
 
 

@@ -69,38 +69,55 @@ def upload_file(bill_id):
 
   if file and allowed_file(file.filename):
 
-      result = File.select_file_by_bill_id(bill_id)
-                print(result)
-                if result:
-                    return custom_http_code("file already exists with bill delete first",400)
-                filename = secure_filename(file.filename)
-                id=str(uuid.uuid4().hex)
+      # check if destination bill already exists in the file models
+      # since each bill can only have 1 attachment, don't proceed if bill already exists
+      bill_in_question = FileModel.select_file_by_bill_id(bill_id)
+      print(bill_in_question)
 
-	  filename = secure_filename(file.filename)
-	  s3_url = file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-	  resp = jsonify({'message': 'File successfully uploaded', 'url': Haikunator().haikunate(delimiter = '.', token_hex = True, token_length = 6), 'hash_digest': hashlib.md5(file.stream.read()).hexdigest(), 'file_size': os.stat(filename).st_size, 'id':  uuid.uuid4(), 'upload_date': str(date.today()), 'file_name': filename, 'file_origin': str(os.path.abspath(filename))})
-	  resp.status_code = 201
-	  return resp
+      # if bill in question exists, can't add another file attachment
+      if bill_in_question:
+          return custom_http_code("bill already has file attached, please delete attachment!", 400)
+
+      # bill does not contain an attachment so continue to build file metadata
+      file_id = str(uuid.uuid4())
+      filename = secure_filename(file.filename)
+      file_size = os.stat(filename).st_size
+      url = Haikunator().haikunate(delimiter = '.', token_hex = True, token_length = 6)
+      hash_digest = hashlib.md5(file.stream.read()).hexdigest()
+      upload_date = str(date.today())
+      file_origin = str(os.path.abspath(filename))
+
+      # create a unique folder to save each file attachment temporarily on disk
+      directory = '/' + bill_in_question.owner_id  + '/' + bill_id + '/' + file_id
+      temp_folder = os.path.join(app.config['UPLOAD_FOLDER'], directory)
+      print(temp_folder)
+
+      # check the if the folder already exists
+      if not os.path.isdir(temp_folder):
+        os.mkdir(temp_folder)
+      else:
+        return custom_http_code("folder already exists", 400)
+
+      destination_folder = '/'.join([temp_folder, filename])
+
+      # saves file to specified local folder or s3 bucket
+      file.save(destination_folder)
+
+      # fill in user entered json body via postman
+      requested_file_json = request.get_json(force = True)
+      file_data = file_schema.load(requested_file_json)
+
+      # append file metadata to attachment
+      file_data.update({'id': file_id, 'url': url, 'hash_digest': hash_digest, 'file_size': file_size, 'upload_date': upload_date, 'file_name': filename, 'file_origin': file_origin})
+
+      # save file object to postgresql file table
+      file_object = FileModel(file_data)
+      file_object.save()
+      file_http_response = file_schema.dump(file_object)
+      return custom_response(file_http_response, 201)
 
   else:
-	  resp = jsonify({'message' : 'Allowed file types are pdf, png, jpg, jpeg'})
-	  resp.status_code = 400
-	  return resp
-
-
-
-
-
-  new_uuid = uuid.uuid4()
-  file_data.update({'id': str(new_uuid)})
-
-
-  bill_data.update({'owner_id': user_id})
-  bill_object = BillModel(bill_data)
-  bill_object.save()
-  ser_data = bill_schema.dump(bill_object)
-  return custom_response(ser_data, 201)
-
+      return custom_response('Allowed file types are pdf, png, jpg, jpeg', 400)
 
 @bill_api.route('/', methods=['GET'])
 @auth.login_required
