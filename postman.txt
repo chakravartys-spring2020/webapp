@@ -1,0 +1,81 @@
+Create User POST http://127.0.0.1:5000/v1/user/
+
+{
+	"first_name": "Bob",
+	"last_name": "Riley",
+	"email_address": "bob@riley.com",
+	"password": "Bobriley$1"
+}
+
+{
+	"first_name": "Di",
+	"last_name": "Hongdei",
+	"email_address": "di@hongefil.com",
+	"password": "di1234REAT&"
+}
+
+{
+	"first_name": "Jason",
+	"last_name": "Roy",
+	"email_address": "jason.roy@gmail.com",
+	"password": "jasonRoy$123"
+}
+
+Login POST http://127.0.0.1:5000/v1/user/login
+{
+	"email_address": "maeve@wiley.com",
+	"password": "mavely123"
+}
+
+Login POST http://127.0.0.1:5000/v1/user/login
+{
+	"email_address": "xchakravarty@gmail.com",
+	"password": "srinjoy93"
+}
+
+Get Self GET http://127.0.0.1:5000/v1/user/self
+
+
+{
+	"first_name": "Christian",
+	"last_name": "Eriksen",
+	"email_address": "inter@milan.com",
+	"password": "Erik$en123"
+}
+
+{
+	"first_name": "Ngolo",
+	"last_name": "Kanta",
+	"email_address": "ngolo@spurs.com",
+	"password": "ngolo@23Kan"
+}
+
+{
+	"first_name": "Nikolay",
+	"last_name": "Tesla",
+	"email_address": "niko@tesla.com",
+	"password": "nikolaTesla"
+}
+
+Update Self Put http://127.0.0.1:5000/v1/user/self
+{
+	"first_name": "Christian"
+}
+
+
+Create New Bill POST http://127.0.0.1:5000/v1/bill/
+{
+  "vendor": "Mathworks",
+  "bill_date": "2020-11-11",
+  "due_date": "2021-10-09",
+  "amount_due": 1000,
+  "categories": ["spring2020"],
+  "paymentStatus": "due"
+}
+
+{
+  "file_name": "mybill.pdf",
+  "id": "8f3fe850-db6b-46e3-a413-49ddd07d5fdd",
+  "url": "/tmp/file.jpg",
+  "upload_date": "2020-02-13"
+}
