@@ -62,7 +62,7 @@ def create():
   else:
       return custom_response({'Bad Request': email_error}, 400)
 
-@user_api.route('/all', methods = ['GET'])
+@user_api.route('/all/', methods = ['GET'])
 # @auth.login_required
 def get_all():
   """
