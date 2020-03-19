@@ -205,7 +205,7 @@ def upload_file(bill_id):
         file_size = s3_client.head_object(Bucket=bucketname, Key=filename).get('ContentLength')
         url = Haikunator().haikunate(delimiter = '.', token_hex = True, token_length = 6)
         upload_date = str(s3_client.head_object(Bucket=bucketname, Key=filename).get('LastModified'))
-        hash_digest = s3_client.head_object(Bucket=bucketname, Key='test.pdf').get('ETag')
+        hash_digest = s3_client.head_object(Bucket=bucketname, Key='filename').get('ETag')
 
         file_dict = {'id': file_id, 'url': url, 'hash_digest': hash_digest, 'file_size': file_size, 'upload_date': upload_date, 'file_name': filename, 'file_owner': user_id, 'bill_attached_to': bill_id}
         file_data = file_schema.load(file_dict)
