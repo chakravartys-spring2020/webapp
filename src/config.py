@@ -6,12 +6,16 @@ class Config(object):
     CSRF_ENABLED = True
     JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
     endpoint = os.getenv('POSTGRES_HOST')
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@' + endpoint + '/postgres'
+    if endpoint is not None:
+        SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@' + endpoint + '/postgres'
+
 
 class Development(Config):
     """Configurations for the development environment"""
     DEBUG = True
     TESTING = False
+    
+
     
 
 class Testing(Config):
